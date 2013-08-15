@@ -92,7 +92,8 @@
  
 ;; Development Tools
 (semantic-mode 1)
-(global-cedet-m3-minor-mode t) ; activates CEDET's context menu bound to the right mouse button
+;(global-cedet-m3-minor-mode t) ; activates CEDET's context menu bound to the right mouse button
+  ;; After doing some pallet-updates this no longer works
 (semantic-speedbar-analysis t)
 (global-ede-mode 1)
 (setq semantic-complete-inline-analyzer-idle-displayor-class 'semantic-displayor-ghost)
