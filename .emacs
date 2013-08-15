@@ -94,11 +94,11 @@
 (semantic-mode 1)
 ;(global-cedet-m3-minor-mode t) ; activates CEDET's context menu bound to the right mouse button
   ;; After doing some pallet-updates this no longer works
-(semantic-speedbar-analysis t)
+;(semantic-speedbar-analysis t)
 (global-ede-mode 1)
 (setq semantic-complete-inline-analyzer-idle-displayor-class 'semantic-displayor-ghost)
 (setq semanticdb-find-default-throttle '(project unloaded system recursive))
-(global-semantic-tag-unfolding-mode t)
+;(global-semantic-tag-unfolding-mode t)
 (global-semantic-decoration-mode 1)
   '(semantic-decoration-styles
     (quote (
@@ -125,21 +125,8 @@
 (add-hook 'c-mode-common-hook 'c++-mode-cedet-hook)
  
 ;; Projects
-;;;;;              MODIB
-(ede-cpp-root-project "MODIB"
-:name "Memory Oriented Dynamic Instrumentation and Interactive Visualization of Binaries"
-:file (concat WSLocation "/MODIB/src/CMakeLists.txt")
-:srcroot (concat WSLocation "/MODIB/src")
-:include-path '("/"
- 		"/library/dataStructures/include"
- 		 "/library/graphUtils/include" 
- 		 "/library/MODIB-gui/include" 
- 		 "/library/MODIB-Importers/include"
- 		 "/library/MODIB-Importers/DatabaseImporter/include"
- 		 "/library/MODIB-Importers/remoteLoader/include"
- 		 "/library/sharedResources/include"
- 		 )
-)
+
+
 ;;  Python Includes
 (setenv "PYTHONPATH" (concat TulipLocation "/tulip-build-debug/install/lib/python"))
 (setenv "LD_LIBRARY_PATH" (concat TulipLocation "/tulip-build-debug/install/lib"))
@@ -210,7 +197,8 @@
      readonly
      ring
      services
-     stamptrack)))
+     ;stamptrack
+     )))
  '(erc-nick "SomeDamnBody")
  '(erc-system-name "EmacsERC")
  '(erc-timestamp-format "[%a, %D, %H:%M:%S]")
