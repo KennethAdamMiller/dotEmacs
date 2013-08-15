@@ -8,7 +8,6 @@
 (require 'pallet)
 (require 'cask)
 (cask-initialize)
-
 (require 'quickrun)
 (require 'solarized-theme)
 (require 'window-number)
@@ -28,7 +27,25 @@
 (require 'pymacs)
 (require 'erc)
 (require 'semantic/sb)
- 
+
+;; Variable definitions
+(if (eq system-type 'darwin)
+    (progn (setq TulipLocation
+		 (concat (expand-file-name "~")
+			 "/Dropbox/workspace/tulip-build" ))
+	   (setq WSLocation
+		 (concat (expand-file-name "~")
+			 "/Dropbox/workspace"))
+    )
+  (if (eq system-type 'gnu/linux)
+    (progn (setq TulipLocation (concat (expand-file-name "~") "/tulip-build"))
+	   (setq WSLocation
+		 (concat (expand-file-name "~")
+			 "workspace"))
+	   )
+  )
+)
+
  
 ;; Typing tools
 (undohist-initialize)
@@ -110,8 +127,8 @@
 ;;;;;              MODIB
 (ede-cpp-root-project "MODIB"
 :name "Memory Oriented Dynamic Instrumentation and Interactive Visualization of Binaries"
-:file "~/workspace/MODIB/src/CMakeLists.txt"
-:srcroot "~/workspace/MODIB/src"
+:file (concat WSLocation "/MODIB/src/CMakeLists.txt")
+:srcroot (concat WSLocation "/MODIB/src")
 :include-path '("/"
  		"/library/dataStructures/include"
  		 "/library/graphUtils/include" 
@@ -123,19 +140,20 @@
  		 )
 )
 ;;  Python Includes
-(setenv "PYTHONPATH" "/home/adam/tulip-build/tulip-build-debug/install/lib/python")
-(setenv "LD_LIBRARY_PATH" "/home/adam/tulip-build/tulip-build-debug/install/lib")
+(setenv "PYTHONPATH" (concat TulipLocation "/tulip-build-debug/install/lib/python"))
+(setenv "LD_LIBRARY_PATH" (concat TulipLocation "/tulip-build-debug/install/lib"))
 ;;  C++ Includes
 ;;; TULIP INCLUDES
-(semantic-add-system-include "~/tulip-build/tulip-build-debug/install/include" 'c++-mode)
+(semantic-add-system-include (concat TulipLocation "/tulip-build-debug/install/include") 'c++-mode)
+
 ;;; MODIB INCLUDES
-(semantic-add-system-include "~/workspace/MODIB/src/library/dataStructures/include" 'c++-mode)
-(semantic-add-system-include "~/workspace/MODIB/src/library/graphUtils/include" 'c++-mode)
-(semantic-add-system-include "~/workspace/MODIB/src/library/MODIB-gui/include" 'c++-mode)
-(semantic-add-system-include "~/workspace/MODIB/src/library/MODIB-Importers/include" 'c++-mode)
-(semantic-add-system-include "~/workspace/MODIB/src/library/MODIB-Importers/DatabaseImporter/include" 'c++-mode)
-(semantic-add-system-include "~/workspace/MODIB/src/library/MODIB-Importers/remoteLoader/include" 'c++-mode)
-(semantic-add-system-include "~/workspace/MODIB/src/library/sharedResources/include" 'c++-mode)
+(semantic-add-system-include (concat WSLocation "/MODIB/src/library/dataStructures/include") 'c++-mode)
+(semantic-add-system-include (concat WSLocation "/MODIB/src/library/graphUtils/include") 'c++-mode)
+(semantic-add-system-include (concat WSLocation "/MODIB/src/library/MODIB-gui/include") 'c++-mode)
+(semantic-add-system-include (concat WSLocation "/MODIB/src/library/MODIB-Importers/include") 'c++-mode)
+(semantic-add-system-include (concat WSLocation "/MODIB/src/library/MODIB-Importers/DatabaseImporter/include") 'c++-mode)
+(semantic-add-system-include (concat WSLocation "/MODIB/src/library/MODIB-Importers/remoteLoader/include") 'c++-mode)
+(semantic-add-system-include (concat WSLocation "/MODIB/src/library/sharedResources/include") 'c++-mode)
 ;;; QT INCLUDES
 (semantic-add-system-include "/usr/include/qt5/QtConcurrent"		'c++-mode)
 (semantic-add-system-include "/usr/include/qt5/QtCore"			'c++-mode)
@@ -174,7 +192,24 @@
  '(custom-safe-themes (quote ("8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" default)))
  '(ecb-options-version "2.40")
  '(erc-insert-timestamp-function (quote erc-insert-timestamp-left))
- '(erc-modules (quote (autojoin button completion fill irccontrols list match menu move-to-prompt netsplit networks noncommands readonly ring services stamptrack)))
+ '(erc-modules
+   (quote
+    (autojoin
+     button
+     completion
+     fill
+     irccontrols
+     list
+     match
+     menu
+     move-to-prompt
+     netsplit
+     networks
+     noncommands
+     readonly
+     ring
+     services
+     stamptrack)))
  '(erc-nick "SomeDamnBody")
  '(erc-system-name "EmacsERC")
  '(erc-timestamp-format "[%a, %D, %H:%M:%S]")
@@ -185,7 +220,10 @@
  '(global-semantic-idle-local-symbol-highlight-mode t nil (semantic/idle))
  '(global-semantic-idle-scheduler-mode t)
  '(global-semantic-idle-summary-mode t)
- '(semantic-python-dependency-system-include-path (quote ("/home/adam/tulip-build/tulip-build-debug/install/lib/python" "/home/adam/tulip-build/tulip-build-ebug/install/lib"))))
+ '(semantic-python-dependency-system-include-path
+   (quote (
+	   (concat TulipLocation "/tulip-build-debug/install/lib/python")
+	   (concat TulipLocation "/tulip-build-ebug/install/lib")))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
