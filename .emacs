@@ -1,7 +1,14 @@
-;(require 'package)
+(require 'package)
+(add-to-list 'package-archives
+  '("marmalade" .
+    "http://marmalade-repo.org/packages/"))
+(add-to-list 'package-archives
+  '("melpa" . "http://melpa.milkbox.net/packages/"))
 (package-initialize)
-(require 'carton)
 (require 'pallet)
+(require 'cask)
+(cask-initialize)
+
 (require 'quickrun)
 (require 'solarized-theme)
 (require 'window-number)
@@ -21,18 +28,13 @@
 (require 'pymacs)
 (require 'erc)
 (require 'semantic/sb)
-(add-to-list 'package-archives
-  '("marmalade" .
-    "http://marmalade-repo.org/packages/"))
-(add-to-list 'package-archives
-  '("melpa" . "http://melpa.milkbox.net/packages/"))
-
-
+ 
+ 
 ;; Typing tools
 (undohist-initialize)
 (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
 (global-set-key (kbd "C-c , -") 'senator-fold-tag)
-(global-set-key (kbd "C-c , +") 'senator-unfold-tag))
+(global-set-key (kbd "C-c , +") 'senator-unfold-tag)
 (setq ns-command-modifier 'meta)
 (global-set-key (kbd "C-c e") 'evil-mode)
 ;(add-hook 'after-init-hook 'evil-mode)
@@ -43,9 +45,10 @@
                        ; but prefer  standard emacs keys
 (which-function-mode 1)
 (delete-selection-mode 1)  ;; this allows you to select regions of text and use del
-			   ;; to delete it or to type to replace it
+ 			   ;; to delete it or to type to replace it
 (auto-complete-mode 1)
-
+(savehist-mode 1)
+ 
 ;; Window tools
 (winner-mode t)
 (golden-ratio-mode 1)
@@ -61,15 +64,15 @@
 ; numbers with the C-x C-j prefix.  Another mode,
 ; `window-number-meta-mode' enables the use of the M- prefix."
 ;   t)
-
+ 
 ;; Buffer tools
 (global-set-key (kbd "C-c C-b") 'ibuffer)
-
+ 
 ;; Theme and appearances changes
 (load-theme 'solarized-dark t)
 (setq solarized-contrast 'high)
-(desktop-save-mode 1)   ; enables you to save & restore the set of open windows
-
+;(desktop-save-mode 0)   ; enables you to save & restore the set of open windows
+ 
 ;; Development Tools
 (semantic-mode 1)
 (global-cedet-m3-minor-mode t) ; activates CEDET's context menu bound to the right mouse button
@@ -81,10 +84,10 @@
 (global-semantic-decoration-mode 1)
   '(semantic-decoration-styles
     (quote (
-	    ("semantic-decoration-on-protected-members")
-	    ("semantic-decoration-on-private-members")
-	    ("semantic-tag-boundary" . t)
-	    ("semantic-decoration-on-includes"))))
+ 	    ("semantic-decoration-on-protected-members")
+ 	    ("semantic-decoration-on-private-members")
+ 	    ("semantic-tag-boundary" . t)
+ 	    ("semantic-decoration-on-includes"))))
 ;(add-hook 'find-file-hook 'flymake-find-file-hook)
 ;(flymake-mode 1)
 ;;;;;             Python 
@@ -102,7 +105,7 @@
   (local-set-key "." 'semantic-complete-self-insert)
   (local-set-key ">" 'semantic-complete-self-insert))
 (add-hook 'c-mode-common-hook 'c++-mode-cedet-hook)
-
+ 
 ;; Projects
 ;;;;;              MODIB
 (ede-cpp-root-project "MODIB"
@@ -110,14 +113,14 @@
 :file "~/workspace/MODIB/src/CMakeLists.txt"
 :srcroot "~/workspace/MODIB/src"
 :include-path '("/"
-		"/library/dataStructures/include"
-		 "/library/graphUtils/include" 
-		 "/library/MODIB-gui/include" 
-		 "/library/MODIB-Importers/include"
-		 "/library/MODIB-Importers/DatabaseImporter/include"
-		 "/library/MODIB-Importers/remoteLoader/include"
-		 "/library/sharedResources/include"
-		 )
+ 		"/library/dataStructures/include"
+ 		 "/library/graphUtils/include" 
+ 		 "/library/MODIB-gui/include" 
+ 		 "/library/MODIB-Importers/include"
+ 		 "/library/MODIB-Importers/DatabaseImporter/include"
+ 		 "/library/MODIB-Importers/remoteLoader/include"
+ 		 "/library/sharedResources/include"
+ 		 )
 )
 ;;  Python Includes
 (setenv "PYTHONPATH" "/home/adam/tulip-build/tulip-build-debug/install/lib/python")
@@ -156,12 +159,12 @@
 (semantic-add-system-include "/usr/include/qt5/QtWidgets"		'c++-mode)
 (semantic-add-system-include "/usr/include/qt5/QtXml"			'c++-mode)
 (semantic-add-system-include "/usr/include/qt5/QtXmlPatterns"		'c++-mode)
-
-
-
+ 
+ 
+ 
 ;;; Miscellaneous settings
 (setq make-backup-files nil)
-
+ 
 ;;;;;; Stuff managed by Emacs automatically
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -171,8 +174,8 @@
  '(custom-safe-themes (quote ("8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" default)))
  '(ecb-options-version "2.40")
  '(erc-insert-timestamp-function (quote erc-insert-timestamp-left))
- '(erc-modules (quote (autojoin button completion fill irccontrols list match menu move-to-prompt netsplit networks noncommands readonly ring services stamp track)))
- '(erc-nick "SuperNoeMan")
+ '(erc-modules (quote (autojoin button completion fill irccontrols list match menu move-to-prompt netsplit networks noncommands readonly ring services stamptrack)))
+ '(erc-nick "SomeDamnBody")
  '(erc-system-name "EmacsERC")
  '(erc-timestamp-format "[%a, %D, %H:%M:%S]")
  '(global-semantic-decoration-mode t)
@@ -182,7 +185,7 @@
  '(global-semantic-idle-local-symbol-highlight-mode t nil (semantic/idle))
  '(global-semantic-idle-scheduler-mode t)
  '(global-semantic-idle-summary-mode t)
- '(semantic-python-dependency-system-include-path (quote ("/home/adam/tulip-build/tulip-build-debug/install/lib/python" "/home/adam/tulip-build/tulip-build-debug/install/lib"))))
+ '(semantic-python-dependency-system-include-path (quote ("/home/adam/tulip-build/tulip-build-debug/install/lib/python" "/home/adam/tulip-build/tulip-build-ebug/install/lib"))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
