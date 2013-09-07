@@ -44,6 +44,16 @@
 		 (concat (expand-file-name "~")
 			 "workspace"))
 	   (setq QtDir "/usr/include/qt5")
+    )
+  )
+  (if (eq system-type 'windows-nt)
+    (progn
+           (setq TulipLocation (concat (expand-file-name "~") "/tulip-build"))
+	   (setq WSLocation
+		 (concat (expand-file-name "~")
+			 "\workspace"))
+	   (setq QtDir "C:\Qt\5.1.1\msvc2012_64_opengl\include")
+    )
   )
 )
 
