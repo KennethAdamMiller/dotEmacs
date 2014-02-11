@@ -33,11 +33,12 @@
 (if (eq system-type 'darwin)
     (progn (setq TulipLocation
 		 (concat (expand-file-name "~")
-			 "/Dropbox/workspace/tulip-build" ))
+			 "/tulip-build" ))
 	   (setq WSLocation
 		 (concat (expand-file-name "~")
-			 "/Dropbox/workspace"))
+			 "/workspace"))
 	   (setq QtDir "/Applications/Qt/5.0.2/clang_64/include")
+	   (setenv "DYLD_LIBRARY_PATH" (concat TulipLocation "/tulip-build-debug/install/lib")) 
     )
   (if (eq system-type 'gnu/linux)
     (progn (setq TulipLocation (concat (expand-file-name "~") "/tulip-build"))
@@ -45,6 +46,7 @@
 		 (concat (expand-file-name "~")
 			 "workspace"))
 	   (setq QtDir "/usr/include/qt5")
+	   (setenv "LD_LIBRARY_PATH" (concat TulipLocation "/tulip-build-debug/install/lib"))
     )
   )
   (if (eq system-type 'windows-nt)
@@ -70,7 +72,8 @@
 ;(add-hook 'after-init-hook 'evil-mode)
 (setq scroll-conservatively most-positive-fixnum)
 (setq scroll-step 1)
-;(cua-selection-mode t) ; because I like rectangle support, 
+(setq auto-window-vscroll nil)
+(cua-selection-mode t) ; because I like rectangle support, 
                        ; global mark mode and other features
                        ; but prefer  standard emacs keys
 (which-function-mode 1)
@@ -142,7 +145,7 @@
 
 ;;  Python Includes
 (setenv "PYTHONPATH" (concat TulipLocation "/tulip-build-debug/install/lib/python"))
-(setenv "LD_LIBRARY_PATH" (concat TulipLocation "/tulip-build-debug/install/lib"))
+
 ;;  C++ Includes
 ;;; TULIP INCLUDES
 (semantic-add-system-include (concat TulipLocation "/tulip-build-debug/install/include") 'c++-mode)
