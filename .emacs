@@ -64,12 +64,13 @@
 (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
 (global-set-key (kbd "C-c , -") 'senator-fold-tag)
 (global-set-key (kbd "C-c , +") 'senator-unfold-tag)
+(global-set-key (kbd "M-s s") 'isend-send)
 (setq ns-command-modifier 'meta)
 (global-set-key (kbd "C-c e") 'evil-mode)
 ;(add-hook 'after-init-hook 'evil-mode)
 (setq scroll-conservatively most-positive-fixnum)
 (setq scroll-step 1)
-(cua-selection-mode t) ; because I like rectangle support, 
+;(cua-selection-mode t) ; because I like rectangle support, 
                        ; global mark mode and other features
                        ; but prefer  standard emacs keys
 (which-function-mode 1)
