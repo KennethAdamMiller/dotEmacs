@@ -5,6 +5,7 @@
 (add-to-list 'package-archives
   '("melpa" . "http://melpa.milkbox.net/packages/"))
 (package-initialize)
+(require 'cl-lib)
 (require 'pallet)
 (require 'cask)
 (cask-initialize)
