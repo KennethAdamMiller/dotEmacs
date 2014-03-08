@@ -38,7 +38,7 @@
 		 (concat (expand-file-name "~")
 			 "/workspace"))
 	   (setq QtDir "/Applications/Qt/5.0.2/clang_64/include")
-	   (setenv "DYLD_LIBRARY_PATH" (concat TulipLocation "/tulip-build-debug/install/lib")) 
+	   (setenv "DYLD_LIBRARY_PATH" (concat TulipLocation "/build/x64/debug/Qt5.2.0/install/lib")) 
     )
   (if (eq system-type 'gnu/linux)
     (progn (setq TulipLocation (concat (expand-file-name "~") "/tulip-build"))
@@ -46,7 +46,7 @@
 		 (concat (expand-file-name "~")
 			 "workspace"))
 	   (setq QtDir "/usr/include/qt5")
-	   (setenv "LD_LIBRARY_PATH" (concat TulipLocation "/tulip-build-debug/install/lib"))
+	   (setenv "LD_LIBRARY_PATH" (concat TulipLocation "/tulip-build-debug-bleeding-edge/install/lib"))
     )
   )
   (if (eq system-type 'windows-nt)
@@ -144,7 +144,7 @@
 
 
 ;;  Python Includes
-(setenv "PYTHONPATH" (concat TulipLocation "/tulip-build-debug/install/lib/python"))
+(setenv "PYTHONPATH" (concat TulipLocation "/build/x64/debug/Qt5.2.0/install/lib/python"))
 
 ;;  C++ Includes
 ;;; TULIP INCLUDES
