@@ -50,6 +50,7 @@
 (depends-on "git")
 (depends-on "git-blame")
 (depends-on "golden-ratio")
+(depends-on "groovy-mode")
 (depends-on "helm")
 (depends-on "helm-dired-recent-dirs")
 (depends-on "helm-gtags")
