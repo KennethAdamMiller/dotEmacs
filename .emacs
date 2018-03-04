@@ -6,9 +6,9 @@
   '("melpa" . "http://melpa.milkbox.net/packages/"))
 (package-initialize)
 (require 'cl-lib)
-(require 'pallet)
 (require 'cask)
 (cask-initialize)
+(require 'pallet)
 (require 'quickrun)
 (require 'solarized-theme)
 (require 'window-number)
@@ -20,49 +20,30 @@
 (require 'flycheck)
 (require 'elscreen)
 (require 'magit)
-(require 'ecb)
+;(require 'ecb)
 (require 'rect-mark)
 (require 'rainbow-delimiters)
-(require 'undohist)
+;;(require 'undohist)
 (require 'python)
-(require 'pymacs)
+;;(require 'pymacs)
 (require 'erc)
 (require 'semantic/sb)
 
-;; Variable definitions
-(if (eq system-type 'darwin)
-    (progn (setq TulipLocation
-		 (concat (expand-file-name "~")
-			 "/tulip-build" ))
-	   (setq WSLocation
-		 (concat (expand-file-name "~")
-			 "/workspace"))
-	   (setq QtDir "/Applications/Qt/5.0.2/clang_64/include")
-	   (setenv "DYLD_LIBRARY_PATH" (concat TulipLocation "/build/x64/debug/Qt5.2.0/install/lib")) 
-    )
-  (if (eq system-type 'gnu/linux)
-    (progn (setq TulipLocation (concat (expand-file-name "~") "/tulip-build"))
-	   (setq WSLocation
-		 (concat (expand-file-name "~")
-			 "workspace"))
-	   (setq QtDir "/usr/include/qt5")
-	   (setenv "LD_LIBRARY_PATH" (concat TulipLocation "/tulip-build-debug-bleeding-edge/install/lib"))
-    )
-  )
-  (if (eq system-type 'windows-nt)
-    (progn
-           (setq TulipLocation (concat (expand-file-name "~") "/tulip-build"))
-	   (setq WSLocation
-		 (concat (expand-file-name "~")
-			 "\workspace"))
-	   (setq QtDir "C:\Qt\5.1.1\msvc2012_64_opengl\include")
-    )
-  )
-)
+(setenv "PATH" (concat (getenv "PATH") ":" (getenv "HOME") "/homebrew/bin"))
+(setenv "PATH" (concat (getenv "PATH") ":" "/opt/local/bin"))
+(setenv "PATH" (concat (getenv "PATH") ":" "/usr/local/bin"))
+(defun opam-env ()
+  (interactive nil)
+  (dolist (var (car (read-from-string (shell-command-to-string "opam config env --sexp"))))
+    (setenv (car var) (cadr var))))
+(opam-env)
+(setq exec-path (split-string (getenv "PATH") path-separator))
+(load "~/.emacs.d/lisp/PG/generic/proof-site")
 
+;; Variable definitions
  
 ;; Typing tools
-(undohist-initialize)
+;;(undohist-initialize)
 (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
 (global-set-key (kbd "C-c , -") 'senator-fold-tag)
 (global-set-key (kbd "C-c , +") 'senator-unfold-tag)
@@ -128,9 +109,9 @@
   (autoload 'pylint "pylint")
   (add-hook 'python-mode-hook 'pylint-add-menu-items)
   (add-hook 'python-mode-hook 'pylint-add-key-bindings)
-  (elpy-enable) ; python tools
-  (elpy-use-cpython)
-  (add-hook 'python-mode-hook 'isend-mode)
+  ;(elpy-enable) ; python tools
+  ;(elpy-use-cpython)
+  ;(add-hook 'python-mode-hook 'isend-mode)
   (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
 ;;;;;             C/C++
 (defun c++-mode-cedet-hook ()
@@ -140,83 +121,80 @@
   (local-set-key ">" 'semantic-complete-self-insert))
 (add-hook 'c-mode-common-hook 'c++-mode-cedet-hook)
  
-;; Projects
-
-
-;;  Python Includes
-(setenv "PYTHONPATH" (concat TulipLocation "/build/x64/debug/Qt5.2.0/install/lib/python"))
-
-;;  C++ Includes
-;;; TULIP INCLUDES
-(semantic-add-system-include (concat TulipLocation "/tulip-build-debug/install/include") 'c++-mode)
-
-;;; MODIB INCLUDES
-(semantic-add-system-include (concat WSLocation "/MODIB/build-debug") 'c++-mode)
-(semantic-add-system-include (concat WSLocation "/MODIB/src/library/dataStructures/include") 'c++-mode)
-(semantic-add-system-include (concat WSLocation "/MODIB/src/library/graphUtils/include") 'c++-mode)
-(semantic-add-system-include (concat WSLocation "/MODIB/src/library/MODIB-gui/include") 'c++-mode)
-(semantic-add-system-include (concat WSLocation "/MODIB/src/library/MODIB-Importers/include") 'c++-mode)
-(semantic-add-system-include (concat WSLocation "/MODIB/src/library/MODIB-Importers/DatabaseImporter/include") 'c++-mode)
-(semantic-add-system-include (concat WSLocation "/MODIB/src/library/MODIB-Importers/remoteLoader/include") 'c++-mode)
-(semantic-add-system-include (concat WSLocation "/MODIB/src/library/sharedResources/include") 'c++-mode)
-;;; QT INCLUDES
-
-(semantic-add-system-include (concat QtDir "/QtConcurrent")		'c++-mode)
-(semantic-add-system-include (concat QtDir "/QtCore")			'c++-mode)
-(semantic-add-system-include (concat QtDir "/QtDBus")			'c++-mode)
-(semantic-add-system-include (concat QtDir "/QtGui")			'c++-mode)
-(semantic-add-system-include (concat QtDir "/QtLocation")		'c++-mode)
-(semantic-add-system-include (concat QtDir "/QtNetwork")		'c++-mode)
-(semantic-add-system-include (concat QtDir "/QtOpenGL")		'c++-mode)
-(semantic-add-system-include (concat QtDir "/QtPlatformSupport")	'c++-mode)
-(semantic-add-system-include (concat QtDir "/QtPrintSupport")		'c++-mode)
-(semantic-add-system-include (concat QtDir "/QtQml")			'c++-mode)
-(semantic-add-system-include (concat QtDir "/QtQmlDevTools")		'c++-mode)
-(semantic-add-system-include (concat QtDir "/QtQuick")			'c++-mode)
-(semantic-add-system-include (concat QtDir "/QtQuickParticles")	'c++-mode)
-(semantic-add-system-include (concat QtDir "/QtQuickTest")		'c++-mode)
-(semantic-add-system-include (concat QtDir "/QtSensors")		'c++-mode)
-(semantic-add-system-include (concat QtDir "/QtSql")			'c++-mode)
-(semantic-add-system-include (concat QtDir "/QtTest")			'c++-mode)
-(semantic-add-system-include (concat QtDir "/QtWebKit")		'c++-mode)
-(semantic-add-system-include (concat QtDir "/QtWebKitWidgets")		'c++-mode)
-(semantic-add-system-include (concat QtDir "/QtWidgets")		'c++-mode)
-(semantic-add-system-include (concat QtDir "/QtXml")			'c++-mode)
-(semantic-add-system-include (concat QtDir "/QtXmlPatterns")		'c++-mode)
- 
- 
- 
 ;;; Miscellaneous settings
 (setq make-backup-files nil)
- 
+
+;; OCaml setup
+(defun opam-path (path)
+  (let ((opam-share-dir
+         (shell-command-to-string
+          "echo -n `opam config var share`")))
+    (concat opam-share-dir "/" path)))
+
+(add-to-list 'load-path (opam-path "emacs/site-lisp"))
+(add-to-list 'load-path (opam-path "tuareg"))
+(load "tuareg-site-file")
+(add-to-list 'load-path (opam-path "/typerex/ocp-indent/"))
+(setq ocp-indent-path (concat (shell-command-to-string "echo -n `opam config var bin`") "/ocp-indent"))
+
+(require 'ocp-indent)
+(require 'merlin)
+(require 'company)
+(add-to-list 'company-backends 'merlin-company-backend)
+(add-hook 'merlin-mode-hook 'company-mode)
+
+(define-key merlin-mode-map (kbd "C-c TAB") 'company-complete)
+(define-key merlin-mode-map (kbd "C-c C-d") 'merlin-document)
+(define-key merlin-mode-map (kbd "C-c d") 'merlin-destruct)
+
+
+(setq merlin-completion-with-doc t)
+(setq merlin-use-auto-complete-mode nil)
+(setq tuareg-font-lock-symbols t)
+(setq merlin-command 'opam)
+(setq merlin-locate-preference 'mli)
+
+(defun change-symbol (x y)
+  (setcdr (assq x tuareg-font-lock-symbols-alist) y))
+
+(defun ocp-indent-buffer ()
+  (interactive)
+  (save-excursion
+    (mark-whole-buffer)
+    (ocp-indent-region (region-beginning)
+                       (region-end))))
+
+(add-hook 'tuareg-mode-hook
+          (lambda ()
+            (merlin-mode)
+            (local-set-key (kbd "C-c c") 'recompile)
+            (local-set-key (kbd "C-c C-c") 'recompile)
+            (auto-fill-mode)
+            (tuareg-make-indentation-regexps)
+            (add-hook 'before-save-hook 'ocp-indent-buffer nil t)))
+
+(defun opam-env ()
+  (interactive nil)
+  (dolist (var
+           (car (read-from-string
+                 (shell-command-to-string "opam config env --sexp"))))
+    (setenv (car var) (cadr var))))
+
+(provide 'ocaml)
+
 ;;;;;; Stuff managed by Emacs automatically
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(custom-safe-themes (quote ("8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" default)))
- '(ecb-options-version "2.40")
+ '(custom-safe-themes
+   (quote
+    ("8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" default)))
  '(erc-insert-timestamp-function (quote erc-insert-timestamp-left))
  '(erc-modules
    (quote
-    (autojoin
-     button
-     completion
-     fill
-     irccontrols
-     list
-     match
-     menu
-     move-to-prompt
-     netsplit
-     networks
-     noncommands
-     readonly
-     ring
-     services
-     ;stamptrack
-     )))
+    (autojoin button completion fill irccontrols list match menu move-to-prompt netsplit networks noncommands readonly ring services)))
  '(erc-nick "SomeDamnBody")
  '(erc-system-name "EmacsERC")
  '(erc-timestamp-format "[%a, %D, %H:%M:%S]")
@@ -227,10 +205,11 @@
  '(global-semantic-idle-local-symbol-highlight-mode t nil (semantic/idle))
  '(global-semantic-idle-scheduler-mode t)
  '(global-semantic-idle-summary-mode t)
+ '(python-shell-buffer-name "Python3.4")
  '(semantic-python-dependency-system-include-path
-   (quote (
-	   (concat TulipLocation "/tulip-build-debug/install/lib/python")
-	   (concat TulipLocation "/tulip-build-ebug/install/lib")))))
+   (quote
+    ((concat TulipLocation "/tulip-build-debug/install/lib/python")
+     (concat TulipLocation "/tulip-build-ebug/install/lib")))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
