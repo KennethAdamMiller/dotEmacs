@@ -15,7 +15,7 @@
 (require 'undo-tree)
 (require 'slime)
 (require 'jedi)
-(require 'icicles)
+;(require 'icicles)
 (require 'golden-ratio)
 (require 'flycheck)
 (require 'elscreen)
@@ -39,6 +39,14 @@
 (opam-env)
 (setq exec-path (split-string (getenv "PATH") path-separator))
 (load "~/.emacs.d/lisp/PG/generic/proof-site")
+
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '(
+   (emacs-lisp . t)
+   (sh t)
+   (org t)
+   (lilypond t)))
 
 ;; Variable definitions
  
@@ -205,6 +213,10 @@
  '(global-semantic-idle-local-symbol-highlight-mode t nil (semantic/idle))
  '(global-semantic-idle-scheduler-mode t)
  '(global-semantic-idle-summary-mode t)
+ '(muse-project-alist nil)
+ '(package-selected-packages
+   (quote
+    (free-keys docker-api docker emms muse window-number virtualenv undohist tuareg sr-speedbar solarized-theme smex slime rect-mark rainbow-delimiters quickrun python-mode pylint pyde pallet ocp-indent multi-project multi-eshell merlin magit jedi isend-mode hl-todo helm-gtags helm-dired-recent-dirs groovy-mode golden-ratio git ghci-completion ghc ggtags gccsense framesize flymake-python-pyflakes flymake-hlint flymake-haskell-multi flymake-go flycheck floobits fic-mode evil-nerd-commenter evil emr elscreen elpy ein ecukes ecb dsvn disaster dired-efap ctags-update ctags csound-mode comint-better-defaults cmake-project cmake-mode auto-complete-clang-async)))
  '(python-shell-buffer-name "Python3.4")
  '(semantic-python-dependency-system-include-path
    (quote
