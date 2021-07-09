@@ -1,9 +1,5 @@
 (require 'package)
-(add-to-list 'package-archives
-  '("marmalade" .
-    "http://marmalade-repo.org/packages/"))
-(add-to-list 'package-archives
-  '("melpa" . "http://melpa.milkbox.net/packages/"))
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 (package-initialize)
 (require 'cl-lib)
 (require 'cask)
@@ -21,30 +17,46 @@
 (require 'elscreen)
 (require 'magit)
 ;(require 'ecb)
-(require 'rect-mark)
+;(require 'rect-mark)
 (require 'rainbow-delimiters)
-;;(require 'undohist)
+;(require 'undohist)
 (require 'python)
-;;(require 'pymacs)
+;(require 'pymacs)
 (require 'erc)
 (require 'semantic/sb)
+
+(desktop-save-mode 1)
+
+(use-package eaf
+  :load-path "~/workspace/emacs-application-framework" ; Set to "/usr/share/emacs/site-lisp/eaf" if installed from AUR
+  :custom
+  (eaf-find-alternate-file-in-dired t)
+  :config
+  (eaf-bind-key scroll_up "C-n" eaf-pdf-viewer-keybinding)
+  (eaf-bind-key scroll_down "C-p" eaf-pdf-viewer-keybinding)
+  (eaf-bind-key take_photo "p" eaf-camera-keybinding))
+(require 'eaf)
 
 (setenv "PATH" (concat (getenv "PATH") ":" (getenv "HOME") "/homebrew/bin"))
 (setenv "PATH" (concat (getenv "PATH") ":" "/opt/local/bin"))
 (setenv "PATH" (concat (getenv "PATH") ":" "/usr/local/bin"))
-(defun opam-env ()
-  (interactive nil)
-  (dolist (var (car (read-from-string (shell-command-to-string "opam config env --sexp"))))
-    (setenv (car var) (cadr var))))
-(opam-env)
-(setq exec-path (split-string (getenv "PATH") path-separator))
-(load "~/.emacs.d/lisp/PG/generic/proof-site")
+
+;; lyqi mode for editing lilypond music files
+(load (concat (getenv "HOME") "/workspace/lyqi/lyqi"))
+(add-to-list 'auto-mode-alist '("\\.ly$" . lyqi-mode))
+(add-to-list 'auto-mode-alist '("\\.ily$" . lyqi-mode))
+
+;; CLISP specific stuff.
+  (load (expand-file-name "~/.quicklisp/slime-helper.el"))
+  ;; Replace "sbcl" with the path to your implementation
+  (setq inferior-lisp-program "sbcl")
+
 
 (org-babel-do-load-languages
  'org-babel-load-languages
  '(
-   (emacs-lisp . t)
-   (sh t)
+;   (emacs-lisp . t)
+;   (sh t)
    (org t)
    (lilypond t)))
 
@@ -133,18 +145,24 @@
 (setq make-backup-files nil)
 
 ;; OCaml setup
+(defun opam-env ()
+  (interactive nil)
+  (dolist (var (car (read-from-string (shell-command-to-string "opam config env --sexp"))))
+    (setenv (car var) (cadr var))))
 (defun opam-path (path)
   (let ((opam-share-dir
          (shell-command-to-string
           "echo -n `opam config var share`")))
     (concat opam-share-dir "/" path)))
+(opam-env)
+(setq exec-path (split-string (getenv "PATH") path-separator))
+(load "~/.emacs.d/lisp/PG/generic/proof-site")
 
 (add-to-list 'load-path (opam-path "emacs/site-lisp"))
 (add-to-list 'load-path (opam-path "tuareg"))
 (load "tuareg-site-file")
 (add-to-list 'load-path (opam-path "/typerex/ocp-indent/"))
 (setq ocp-indent-path (concat (shell-command-to-string "echo -n `opam config var bin`") "/ocp-indent"))
-
 (require 'ocp-indent)
 (require 'merlin)
 (require 'company)
@@ -181,50 +199,58 @@
             (tuareg-make-indentation-regexps)
             (add-hook 'before-save-hook 'ocp-indent-buffer nil t)))
 
-(defun opam-env ()
-  (interactive nil)
-  (dolist (var
-           (car (read-from-string
-                 (shell-command-to-string "opam config env --sexp"))))
-    (setenv (car var) (cadr var))))
-
 (provide 'ocaml)
 
-;;;;;; Stuff managed by Emacs automatically
+
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   (quote
-    ("8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" default)))
- '(erc-insert-timestamp-function (quote erc-insert-timestamp-left))
- '(erc-modules
-   (quote
-    (autojoin button completion fill irccontrols list match menu move-to-prompt netsplit networks noncommands readonly ring services)))
- '(erc-nick "SomeDamnBody")
- '(erc-system-name "EmacsERC")
- '(erc-timestamp-format "[%a, %D, %H:%M:%S]")
- '(global-semantic-decoration-mode t)
- '(global-semantic-highlight-edits-mode t)
- '(global-semantic-highlight-func-mode t)
- '(global-semantic-idle-completions-mode t nil (semantic/idle))
- '(global-semantic-idle-local-symbol-highlight-mode t nil (semantic/idle))
- '(global-semantic-idle-scheduler-mode t)
- '(global-semantic-idle-summary-mode t)
- '(muse-project-alist nil)
  '(package-selected-packages
    (quote
-    (free-keys docker-api docker emms muse window-number virtualenv undohist tuareg sr-speedbar solarized-theme smex slime rect-mark rainbow-delimiters quickrun python-mode pylint pyde pallet ocp-indent multi-project multi-eshell merlin magit jedi isend-mode hl-todo helm-gtags helm-dired-recent-dirs groovy-mode golden-ratio git ghci-completion ghc ggtags gccsense framesize flymake-python-pyflakes flymake-hlint flymake-haskell-multi flymake-go flycheck floobits fic-mode evil-nerd-commenter evil emr elscreen elpy ein ecukes ecb dsvn disaster dired-efap ctags-update ctags csound-mode comint-better-defaults cmake-project cmake-mode auto-complete-clang-async)))
- '(python-shell-buffer-name "Python3.4")
- '(semantic-python-dependency-system-include-path
-   (quote
-    ((concat TulipLocation "/tulip-build-debug/install/lib/python")
-     (concat TulipLocation "/tulip-build-ebug/install/lib")))))
+    (bap-mode auto-complete-clang-async cmake-mode cmake-project ctags-update dired-efap disaster dsvn ecb ecukes ein elpy elscreen emr evil evil-nerd-commenter fic-mode floobits flycheck flymake-go flymake-haskell-multi flymake-hlint flymake-python-pyflakes framesize fuzzy ggtags ghc ghci-completion git golden-ratio groovy-mode helm-dired-recent-dirs helm-gtags highlight highlight-indentation hl-todo iedit isend-mode jedi list-utils magit multi-project paredit popup projectile pylint python-mode quickrun rainbow-delimiters s slime smex solarized-theme sr-speedbar undohist virtualenv websocket window-number yasnippet pallet))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+
+;; http://stackoverflow.com/questions/803812/emacs-reopen-buffers-from-last-session-on-startup
+(defvar emacs-configuration-directory
+    "~/.emacs.d/"
+    "The directory where the emacs configuration files are stored.")
+(defvar elscreen-tab-configuration-store-filename
+    (concat emacs-configuration-directory ".elscreen")
+    "The file where the elscreen tab configuration is stored.")
+
+(defun elscreen-store ()
+    "Store the elscreen tab configuration."
+    (interactive)
+    (if (desktop-save emacs-configuration-directory)
+        (with-temp-file elscreen-tab-configuration-store-filename
+            (insert (prin1-to-string (elscreen-get-screen-to-name-alist))))))
+(push #'elscreen-store kill-emacs-hook)
+
+(defun elscreen-restore ()
+    "Restore the elscreen tab configuration."
+    (interactive)
+    (if (desktop-read)
+        (let ((screens (reverse
+                        (read
+                         (with-temp-buffer
+                          (insert-file-contents elscreen-tab-configuration-store-filename)
+                          (buffer-string))))))
+            (while screens
+                (setq screen (car (car screens)))
+                (setq buffers (split-string (cdr (car screens)) ":"))
+                (if (eq screen 0)
+                    (switch-to-buffer (car buffers))
+                    (elscreen-find-and-goto-by-buffer (car buffers) t t))
+                (while (cdr buffers)
+                    (switch-to-buffer-other-window (car (cdr buffers)))
+                    (setq buffers (cdr buffers)))
+                (setq screens (cdr screens))))))
+(elscreen-restore)
