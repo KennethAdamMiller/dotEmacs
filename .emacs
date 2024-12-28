@@ -1,16 +1,16 @@
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
-(package-initialize)
+;(package-initialize)
 (require 'cl-lib)
-(require 'cask)
-(cask-initialize)
-(require 'pallet)
+;(require 'cask "~/.cask/cask.el")
+;;(cask-initialize)
+;;(require 'pallet)
 (require 'quickrun)
 (require 'solarized-theme)
 (require 'window-number)
 (require 'undo-tree)
 (require 'slime)
-(require 'jedi)
+;;(require 'jedi)
 ;(require 'icicles)
 (require 'golden-ratio)
 (require 'flycheck)
@@ -22,51 +22,51 @@
 ;(require 'undohist)
 (require 'python)
 ;(require 'pymacs)
-(require 'erc)
-(require 'semantic/sb)
+;(require 'erc)
+;;(require 'semantic/sb)
 
 (desktop-save-mode 1)
 
-(use-package eaf
-  :load-path "~/workspace/emacs-application-framework" ; Set to "/usr/share/emacs/site-lisp/eaf" if installed from AUR
-  :custom
-  (eaf-find-alternate-file-in-dired t)
-  :config
-  (eaf-bind-key scroll_up "C-n" eaf-pdf-viewer-keybinding)
-  (eaf-bind-key scroll_down "C-p" eaf-pdf-viewer-keybinding)
-  (eaf-bind-key take_photo "p" eaf-camera-keybinding))
-(require 'eaf)
+;(use-package eaf
+;  :load-path "~/workspace/emacs-application-framework" ; Set to "/usr/share/emacs/site-lisp/eaf" if installed from AUR
+;  :custom
+;  (eaf-find-alternate-file-in-dired t)
+;  :config
+;  (eaf-bind-key scroll_up "C-n" eaf-pdf-viewer-keybinding)
+;  (eaf-bind-key scroll_down "C-p" eaf-pdf-viewer-keybinding)
+;  (eaf-bind-key take_photo "p" eaf-camera-keybinding))
+;(require 'eaf)
 
 (setenv "PATH" (concat (getenv "PATH") ":" (getenv "HOME") "/homebrew/bin"))
 (setenv "PATH" (concat (getenv "PATH") ":" "/opt/local/bin"))
 (setenv "PATH" (concat (getenv "PATH") ":" "/usr/local/bin"))
 
 ;; lyqi mode for editing lilypond music files
-(load (concat (getenv "HOME") "/workspace/lyqi/lyqi"))
-(add-to-list 'auto-mode-alist '("\\.ly$" . lyqi-mode))
-(add-to-list 'auto-mode-alist '("\\.ily$" . lyqi-mode))
+;(load (concat (getenv "HOME") "/workspace/lyqi/lyqi"))
+;(add-to-list 'auto-mode-alist '("\\.ly$" . lyqi-mode))
+;(add-to-list 'auto-mode-alist '("\\.ily$" . lyqi-mode))
 
 ;; CLISP specific stuff.
-  (load (expand-file-name "~/.quicklisp/slime-helper.el"))
+;  (load (expand-file-name "~/.quicklisp/slime-helper.el"))
   ;; Replace "sbcl" with the path to your implementation
   (setq inferior-lisp-program "sbcl")
 
 
-(org-babel-do-load-languages
- 'org-babel-load-languages
- '(
-;   (emacs-lisp . t)
-;   (sh t)
-   (org t)
-   (lilypond t)))
+;(org-babel-do-load-languages
+; 'org-babel-load-languages
+; '(
+;;   (emacs-lisp . t)
+;;   (sh t)
+;   (org t)
+;   (lilypond t)))
 
 ;; Variable definitions
  
 ;; Typing tools
 ;;(undohist-initialize)
 (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
-(global-set-key (kbd "C-c , -") 'senator-fold-tag)
-(global-set-key (kbd "C-c , +") 'senator-unfold-tag)
+;(global-set-key (kbd "C-c , -") 'senator-fold-tag)
+;(global-set-key (kbd "C-c , +") 'senator-unfold-tag)
 (global-set-key (kbd "M-s s") 'isend-send)
 (setq ns-command-modifier 'meta)
 (global-set-key (kbd "C-c e") 'evil-mode)
@@ -80,7 +80,7 @@
 (which-function-mode 1)
 (delete-selection-mode 1)  ;; this allows you to select regions of text and use del
  			   ;; to delete it or to type to replace it
-(auto-complete-mode 1)
+;(auto-complete-mode 1)
 (savehist-mode 1)
  
 ;; Window tools
@@ -90,7 +90,7 @@
   ad-do-it 
   (golden-ratio)
 )
-(global-linum-mode 1)  ; add line numbers on all files
+;(global-linum-mode 1)  ; add line numbers on all files
 (elscreen-start)
 (window-number-mode)
 ;(autoload 'window-number-mode "window-number"
@@ -154,15 +154,14 @@
          (shell-command-to-string
           "echo -n `opam config var share`")))
     (concat opam-share-dir "/" path)))
-(opam-env)
-(setq exec-path (split-string (getenv "PATH") path-separator))
-(load "~/.emacs.d/lisp/PG/generic/proof-site")
+;(opam-env)
+;(load "~/.emacs.d/lisp/PG/generic/proof-site")
 
 (add-to-list 'load-path (opam-path "emacs/site-lisp"))
 (add-to-list 'load-path (opam-path "tuareg"))
-(load "tuareg-site-file")
-(add-to-list 'load-path (opam-path "/typerex/ocp-indent/"))
-(setq ocp-indent-path (concat (shell-command-to-string "echo -n `opam config var bin`") "/ocp-indent"))
+;(load "tuareg-site-file")
+;(add-to-list 'load-path (opam-path "/typerex/ocp-indent/"))
+;(setq ocp-indent-path (concat (shell-command-to-string "echo -n `opam config var bin`") "/ocp-indent"))
 (require 'ocp-indent)
 (require 'merlin)
 (require 'company)
